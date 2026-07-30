@@ -2,6 +2,8 @@
 /vendor/
 
 # -- Build artifacts --
+*mariadb_test
+*mariadb_test.exe
 *.o
 *.obj
 *.lib
@@ -32,3 +34,7 @@ Desktop.ini
 # -- Misc --
 *.log
 tmp/
+
+# -- Test Env Secrets --
+test/env
+

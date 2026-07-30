@@ -56,6 +56,54 @@ main :: proc() {
 }
 ```
 
+## Testing
+
+The repository includes an integration test program under `test/` that exercises
+the bindings against a live MariaDB/MySQL server. It covers:
+
+- Library and client version information
+- Connection handling (real connect, ping, server info)
+- CREATE TABLE / INSERT (affected rows, insert id)
+- Simple queries (SELECT with field metadata and row iteration)
+- Prepared statements (parameter binding, result binding, fetch)
+- Transactions (autocommit, rollback)
+- Error handling (bad query via mysql_error/mysql_errno/mysql_sqlstate)
+- Cleanup (test table dropped at the end of the run)
+
+### Prerequisites
+
+- A running MariaDB/MySQL server
+- `libmariadb-dev` installed (see [Requirements](#requirements))
+
+### Configuration
+
+The test reads its connection settings from environment variables:
+
+A `test/env.example` template is provided with placeholder values. Copy it to
+`test/env` (which is gitignored), fill in your connection settings, and source
+it:
+
+    cp test/env.example test/env
+    # edit test/env with your connection settings
+    source test/env
+
+### Building and running
+
+From the repository root:
+
+    odin run test
+
+or build the binary first:
+
+    odin build test -out:mariadb_test
+    ./mariadb_test
+
+### Notes
+
+- The test creates a `odin_test` table, so the configured user needs DDL
+  privileges on the target database.
+- The table is dropped again during cleanup at the end of a successful run.
+
 ## Package Structure
 
 The binding is split into purpose-based files under the `mariadb/` directory to avoid a single monolithic file.
